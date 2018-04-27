@@ -1,10 +1,11 @@
-from pyspark import SparkConf, SparkContext
 import collections
+
+from pyspark import SparkConf, SparkContext
 
 conf = SparkConf().setMaster("local").setAppName("MovieRating")
 sc = SparkContext(conf = conf)
 
-lines = sc.textFile("ml-100k/u.data")
+lines = sc.textFile("file:////Users/amoghmishra/Desktop/AmoghM/ApacheSpark/dataset/ml-100k/u.data")
 ratings = lines.map(lambda x: x.split()[2])
 result = ratings.countByValue()
 
