@@ -1,7 +1,7 @@
 from pyspark import SparkConf, SparkContext
 import collections
 
-conf = SparkConf().setMaster("local").setAppName("RatingsHistogram")
+conf = SparkConf().setMaster("local").setAppName("MovieRating")
 sc = SparkContext(conf = conf)
 
 lines = sc.textFile("ml-100k/u.data")
