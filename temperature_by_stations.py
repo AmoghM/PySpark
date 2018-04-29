@@ -4,9 +4,11 @@ def min_temperature():
     conf = SparkConf().setMaster("local").setAppName("MinTemperature")
     sc = SparkContext(conf=conf)
 
+    # station id, date (yyyy-mm-dd), weather-type, temperature
     weather_data = sc.textFile("file:////Users/amoghmishra/Desktop/AmoghM/ApacheSpark/dataset/weather_data.csv")
+    #Finding minimum temperature by station
     min_weather_rdd = weather_data.map(parse).filter(lambda x: "TMIN" in x[1])
-    min_temp_rdd = min_weather_rdd.map(lambda x: (x[0],x[2])).reduceByKey(lambda x,y: min(x,y))
+    min_temp_rdd = min_weather_rdd.map(lambda x: (x[0],x[2])).reduceByKey(lambda x,y: min(x,y)) #min across all station's temperature
 
     min_result = min_temp_rdd.collect()
     print "Station Id, Minimum Temperature"
@@ -14,6 +16,7 @@ def min_temperature():
         print res[0], res[1]
     print "\n"
 
+    #Finding maximum temperature by station
     max_weather_rdd = weather_data.map(parse).filter(lambda x: "TMAX" in x)
     max_temp_rdd = max_weather_rdd.map(lambda x: (x[0],x[2])).reduceByKey(lambda x,y: max(x,y))
     max_result = max_temp_rdd.collect()
@@ -25,7 +28,7 @@ def min_temperature():
 def parse(weather_entry):
     entry = weather_entry.split(",")
     station_id, temp_type, temperature = entry[0], entry[2], entry[3]
-    temperature = float(temperature)/10
+    temperature = float(temperature)/10 #actual temp = temperature in the dataset / 10
 
     return (station_id, temp_type, temperature)
 
