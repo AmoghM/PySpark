@@ -7,9 +7,9 @@ sc = SparkContext(conf=conf)
 def word_count():
     book_content = sc.textFile("file:////Users/amoghmishra/Desktop/AmoghM/ApacheSpark/dataset/Book.txt")
     book_rdd = book_content.flatMap(preprocess)
-    word_value = book_rdd.map(lambda x: (x,1))
-    word_count_agg = word_value.reduceByKey(lambda x,y: x+y)
-    sort_word_count_agg = word_count_agg.map(lambda (x,y):(y,x)).sortByKey()
+    word_value = book_rdd.map(lambda x: (x,1)) #initial freq is 1 for all words
+    word_count_agg = word_value.reduceByKey(lambda x,y: x+y) #aggregating frequency of words
+    sort_word_count_agg = word_count_agg.map(lambda (x,y):(y,x)).sortByKey() #sorting the words on the basis of freq. Freq has to be key.
 
     result = sort_word_count_agg.collect()
     print "WORD COUNT IN DECREASING ORDER"
