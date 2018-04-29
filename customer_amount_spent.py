@@ -7,12 +7,13 @@ def customer_amount():
     #Customer ID, Item ID, Amount Spent
     ecomm_dataset = sc.textFile("file:////Users/amoghmishra/Desktop/AmoghM/ApacheSpark/dataset/customer-orders.csv")
     ecomm_rdd = ecomm_dataset.map(preprocess)
-    cust_amt = ecomm_rdd.reduceByKey(lambda x,y : x+y)
+    cust_amt = ecomm_rdd.reduceByKey(lambda x,y : x+y).map(lambda (x,y): (y,x)) # (cust_id,amt) --> (amt,cust_id)
+    sort_cust_amt = cust_amt.sortByKey() #sorted in ascending order on the basis of amount
 
-    result = cust_amt.collect()
-    print "TOTAL AMOUNT SPENT BY THE CUSTOMER"
+    result = sort_cust_amt.collect()
+    print "TOTAL AMOUNT SPENT BY THE CUSTOMER IN ASCENDING ORDER"
     for res in result:
-        print res[0], res[1]
+        print res[1], res[0]
 
 
 def preprocess(line):
