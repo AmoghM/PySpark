@@ -1,6 +1,5 @@
 from pyspark import SparkConf, SparkContext
 
-
 def find_friends_by_age():
     conf = SparkConf().setMaster("local").setAppName("FriendsByAge")
     sc = SparkContext(conf=conf)
